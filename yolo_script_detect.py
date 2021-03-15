@@ -16,6 +16,14 @@ outputs = None
 vid_src = cv.VideoCapture(video_source)
 vid_src.set(10, 150)
 
+#get framewidth, height
+frame_width = int(vid_src.get(3))
+frame_height = int(vid_src.get(4))
+
+
+#init videowriter
+out = cv.VideoWriter('outpy.avi',cv.VideoWriter_fourcc('M','J','P','G'), 10, (frame_width,frame_height))
+
 # Load names of classes and get random colors
 classes = open('coco.names').read().strip().split('\n')
 np.random.seed(42)
@@ -30,7 +38,7 @@ ln = net.getLayerNames()
 ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 # press any key to quit
-while cv.waitKey(1) == -1:
+while True:
     grabbed, img0 = vid_src.read()
     img = img0.copy()
 
@@ -71,6 +79,10 @@ while cv.waitKey(1) == -1:
             text = "{}: {:.4f}".format(classes[classIDs[i]], confidences[i])
             cv.putText(img, text, (x, y - 5), cv.FONT_HERSHEY_SIMPLEX, 2, color, 2)
 
+    # write frames into avi video
+    # be careful with the defined frames and resized frame.
+    out.write(img)
+
     # scale output video
     scale_percent = rescale_factor  # percent of original size
     width = int(img.shape[1] * scale_percent / 100)
@@ -81,6 +93,10 @@ while cv.waitKey(1) == -1:
     # show output image
     cv.imshow('window', img)
 
+    #press q to quit loop
+    if cv.waitKey(1) & 0xFF == ord('q'):
+        break
 
-vid_src.release
+vid_src.release()
+out.release()
 cv.destroyAllWindows()
