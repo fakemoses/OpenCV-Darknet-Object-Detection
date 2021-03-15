@@ -12,7 +12,7 @@ pip install -r requirements.txt
 
 - Rename your .names file into coco.names and replace the current coco file inside the directory
 
-- To quit the session, press any key. Make sure to rescale your images as it may be too big for your screen
+- To quit the session, press 'q' key. Make sure to rescale your images as it may be too big for your screen
 
 Tutorial to train your model :
 
